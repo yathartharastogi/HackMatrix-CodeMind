@@ -1,0 +1,248 @@
+.ai-panel {
+  width: 380px;
+  height: calc(100vh - 100px);
+  margin: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--color-tertiary);
+  box-shadow: 0 0 20px rgba(17, 136, 238, 0.1);
+}
+
+.ai-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+}
+
+.ai-icon-main {
+  color: var(--color-primary);
+  filter: drop-shadow(0 0 10px var(--color-primary));
+}
+
+.ai-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.ai-content-scroll {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding-right: 8px; /* space for scrollbar */
+}
+
+/* Empty State */
+.ai-empty-state {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.ai-empty-icon {
+  color: var(--bg-card);
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.ai-empty-state p {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-secondary);
+}
+
+/* Loader / Skeleton */
+@keyframes shimmerPulse {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.pulse-bg {
+  background: rgba(126, 160, 197, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.pulse-bg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(194, 232, 255, 0.1), transparent);
+  animation: shimmerPulse 1.5s infinite;
+}
+
+.skeleton-card {
+  padding: 16px;
+  border: 1px solid rgba(194, 232, 255, 0.05);
+  border-radius: 16px;
+  background: rgba(1, 16, 37, 0.4);
+  margin-bottom: 16px;
+}
+
+.skeleton-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.skeleton-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.skeleton-title {
+  width: 100px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.skeleton-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 4px;
+}
+
+.w-full { width: 100%; }
+.w-80 { width: 80%; }
+.w-60 { width: 60%; }
+
+/* AI Results */
+.ai-results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ai-result-card {
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.ai-result-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
+  transform: translateY(-4px);
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.result-header h3 {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.icon-error { color: #f43f5e; }
+.icon-pattern { color: var(--color-tertiary); }
+.icon-tip { color: var(--color-secondary); }
+
+.result-body {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #ccc;
+}
+
+.highlight-tag {
+  color: var(--color-primary);
+  background: rgba(0, 242, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid var(--color-primary);
+}
+
+.ml-1 { margin-left: 4px; }
+.text-strong { color: var(--text-main); font-weight: 600; }
+
+.learning-link {
+  color: var(--color-highlight);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.learning-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Footer & Button */
+.ai-footer {
+  margin-top: 24px;
+}
+
+.practice-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  color: var(--bg-main);
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.4);
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+}
+
+.practice-btn:not(.disabled):hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 0 25px rgba(0, 242, 255, 0.6);
+}
+
+.practice-btn.disabled {
+  background: rgba(1, 16, 37, 0.3);
+  border-color: rgba(126, 160, 197, 0.1);
+  color: rgba(126, 160, 197, 0.4);
+  cursor: not-allowed;
+}
+
+/* Responsiveness - Stack AI panel on tablet */
+@media (max-width: 1200px) {
+  .ai-panel {
+    width: auto;
+    margin: 0 24px 24px;
+    height: auto;
+    min-height: 400px;
+  }
+  .content-layout {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .main-content {
+    overflow-y: visible;
+  }
+}
