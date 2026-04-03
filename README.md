@@ -14,6 +14,10 @@
 
 ## Overview  
 
+![CodeMind Landing Page](./assets/landing.jpeg)
+
+*Modern AI-powered debugging interface with real-time insights and logic analysis.*
+
 CodeMind is an AI-powered debugging assistant that helps users **learn while fixing errors**. Instead of just providing solutions, it tracks user mistake patterns, predicts future errors, and delivers personalized explanations based on the user’s skill level.
 
 ---
@@ -52,6 +56,10 @@ CodeMind focuses on **learning-driven debugging** by:
 
 User writes code → error detected → AI analysis → pattern tracking → personalized feedback  
 
+![Code Analyzer](./assets/analyzer.jpeg)
+
+*AI-powered code analysis with contextual debugging insights.*
+
 ---
 
 ## Impact  
@@ -69,3 +77,19 @@ User writes code → error detected → AI analysis → pattern tracking → per
 - VS Code extension  
 - Mistake history tracking  
 - Collaboration features  
+
+---
+
+## Dashboard  
+
+![Dashboard](./assets/dashboard.jpeg)
+
+*Personalized workspace with error patterns, learning insights, and progress tracking.*
+
+---
+
+## History (Neural Sessions)  
+
+![Neural Sessions](./assets/history.png)
+
+*Chronological tracking of debugging sessions, error classification, and resolution status.*
