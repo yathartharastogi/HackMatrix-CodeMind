@@ -90,6 +90,6 @@ User writes code → error detected → AI analysis → pattern tracking → per
 
 ## History (Neural Sessions)  
 
-![Neural Sessions](./assets/history.png)
+![Neural Sessions](./assets/history.jpeg)
 
 *Chronological tracking of debugging sessions, error classification, and resolution status.*
