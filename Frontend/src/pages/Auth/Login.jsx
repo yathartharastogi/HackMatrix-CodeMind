@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
-import { AlertTriangle, Loader } from 'lucide-react';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 import './Auth.css';
 
 const Login = () => {
@@ -21,87 +21,78 @@ const Login = () => {
     setLoading(true);
     setErrorMsg('');
 
-    // Pre-emptive check to avoid "Failed to fetch" console errors with placeholder URL
     if (supabase.supabaseUrl.includes('placeholder.supabase.co')) {
-      setErrorMsg("Configuration Required: Please set your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in the .env file.");
+      setErrorMsg("Configuration Required: Please set your VITE_SUPABASE_URL and ANON_KEY.");
       setLoading(false);
       return;
     }
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        setErrorMsg(error.message || 'Invalid email or password.');
+        setErrorMsg(error.message || 'Invalid logical credentials.');
         setLoading(false);
       } else {
-        // Upon success, AuthContext triggers an update natively,
-        // we navigate directly
         navigate('/dashboard');
       }
     } catch (err) {
-      console.error(err);
-      setErrorMsg("Network error: Could not connect to Supabase. Ensure your .env keys are valid.");
+      setErrorMsg("Neural link failed: Network trace interrupted.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-layout fade-in">
-      <div className="auth-card">
+    <div className="auth-wrapper">
+      <div className="auth-container animate-fade-up">
         
         <div className="auth-header">
-          <div className="auth-logo-icon">C</div>
-          <h1 className="auth-title">Welcome Back</h1>
-          <p className="auth-subtitle">Log in to your CodeMind UI workspace</p>
+          <div className="auth-logo">CodeMind</div>
+          <span className="auth-subtitle">DECODE YOUR POTENTIAL</span>
         </div>
 
         {errorMsg && (
-          <div className="auth-error-msg fade-in">
+          <div className="auth-error animate-fade-up">
             <AlertTriangle size={16} />
             <span>{errorMsg}</span>
           </div>
         )}
 
         <form className="auth-form" onSubmit={handleLogin}>
-          
           <div className="form-group">
-            <label className="form-label">Email Address</label>
+            <label className="form-label">Email Node</label>
             <input 
               type="email" 
               className="form-input" 
-              placeholder="you@example.com"
+              placeholder="operator@codemind.ai"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Password</label>
+            <label className="form-label">Access Sequence</label>
             <input 
               type="password" 
               className="form-input" 
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
           <button 
             type="submit" 
-            className="primary-cta-btn" 
-            style={{ width: '100%', marginTop: '10px' }}
+            className="auth-btn-primary" 
             disabled={loading}
           >
-            {loading ? <Loader className="spinner" size={20} /> : 'Sign In'}
+            {loading ? <Loader2 className="animate-spin" size={20} /> : 'Establish Session'}
           </button>
         </form>
 
         <div className="auth-footer">
-          Don't have an account? <Link to="/signup" className="auth-link">Sign Up</Link>
+          New node? <Link to="/signup" className="auth-link">Initialize Account</Link>
         </div>
 
       </div>

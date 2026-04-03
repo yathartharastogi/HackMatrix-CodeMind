@@ -1,122 +1,82 @@
 import React, { useState } from 'react';
-import { Search, Filter, Clock, ChevronDown, ChevronUp, CheckCircle, XCircle } from 'lucide-react';
+import { History as HistoryIcon, Search, Code, Clock, CheckCircle2, AlertCircle, FileText, Filter } from 'lucide-react';
 import './History.css';
 
 const History = ({ errorHistory = [] }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterLang, setFilterLang] = useState('All');
-  const [expandedRowId, setExpandedRowId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const toggleExpand = (index) => {
-    setExpandedRowId(expandedRowId === index ? null : index);
-  };
-
-  // Filter Logic
-  const filteredHistory = errorHistory.filter(session => {
-    const matchesSearch = session.code.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (session.response?.error || '').toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesLang = filterLang === 'All' || session.language === filterLang;
-    return matchesSearch && matchesLang;
-  });
+  const filteredHistory = errorHistory.filter(item => 
+    item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.language.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (item.response?.errorType || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="history-dashboard fade-in">
-      <div className="history-header">
-        <h1 className="history-title">Analysis History</h1>
-        <p className="history-subtitle">Review your past sessions and track your debugging journey.</p>
+    <div className="history-page animate-fade-up">
+      <div className="insights-title-section">
+        <h1 className="history-page-title">Neural <span className="text-gold">Sessions</span></h1>
+        <p className="insights-subtitle">Complete chronological trace of your logical evolution</p>
       </div>
 
       <div className="history-controls glass-panel">
-        <div className="h-search-box">
-          <Search size={18} className="text-muted" />
-          <input 
-            type="text" 
-            placeholder="Search past sessions..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-search-input"
-          />
-        </div>
-        <div className="h-filters">
-          <Filter size={18} className="text-muted" />
-          <select 
-            className="h-select" 
-            value={filterLang} 
-            onChange={(e) => setFilterLang(e.target.value)}
-          >
-            <option value="All">All Languages</option>
-            <option value="JavaScript">JavaScript</option>
-            <option value="Python">Python</option>
-            <option value="Java">Java</option>
-          </select>
-        </div>
+         <div className="search-container">
+           <Search size={18} className="text-gold" />
+           <input 
+             type="text" 
+             placeholder="Search session clusters..." 
+             className="search-input"
+             value={searchTerm}
+             onChange={(e) => setSearchTerm(e.target.value)}
+           />
+         </div>
+         <button className="secondary-gold-btn" style={{ padding: '8px 20px', borderRadius: '10px' }}>
+           <Filter size={16} style={{ marginRight: '8px' }} /> ADVANCED FILTER
+         </button>
       </div>
 
-      <div className="history-list">
-        {filteredHistory.length === 0 ? (
-          <div className="empty-history-state glass-panel">
-            <Clock size={32} className="text-muted mb-3" />
-            <p>No analysis history found matching your filters.</p>
-          </div>
+      <div className="history-table-container">
+        {filteredHistory.length > 0 ? (
+          <table className="history-table">
+            <thead>
+              <tr>
+                <th><Clock size={14} /> Timestamp</th>
+                <th><Code size={14} /> Node Structure</th>
+                <th><FileText size={14} /> Classification</th>
+                <th><CheckCircle2 size={14} /> Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredHistory.map((session, index) => (
+                <tr key={index}>
+                  <td style={{ color: 'var(--color-primary)', fontWeight: 800 }}>
+                    {new Date(session.date).toLocaleDateString()}
+                    <div style={{ fontSize: '0.7rem', opacity: 0.6, fontWeight: 500 }}>
+                      {new Date(session.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                  </td>
+                  <td>
+                    <span className="lang-badge" style={{ verticalAlign: 'middle', marginRight: '12px' }}>{session.language}</span>
+                    <span style={{ fontSize: '0.85rem', color: '#BBB' }}>{session.code.substring(0, 40)}...</span>
+                  </td>
+                  <td style={{ fontWeight: 700, color: '#FFF' }}>
+                    {session.response?.errorType || "Logical Optimized"}
+                  </td>
+                  <td>
+                    <div className={`status-cell ${session.status === 'Resolved' ? 'status-resolved' : 'status-needs-improvement'}`}>
+                      <div className="status-dot"></div>
+                      {session.status}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         ) : (
-          filteredHistory.map((session, idx) => {
-            const isExpanded = expandedRowId === idx;
-            const errorType = session.response?.error?.split(':')[0] || 'Unknown Error';
-            const shortCode = session.code.substring(0, 60) + (session.code.length > 60 ? '...' : '');
-            const isResolved = session.status === 'Resolved';
-
-            return (
-              <div key={idx} className={`history-card glass-panel ${isExpanded ? 'expanded' : ''}`}>
-                <div className="h-card-header" onClick={() => toggleExpand(idx)}>
-                  <div className="h-card-meta">
-                    <span className="h-lang-badge">{session.language}</span>
-                    <span className="h-time"><Clock size={14} /> {new Date(session.date).toLocaleDateString()}</span>
-                  </div>
-                  <div className="h-card-main-info">
-                    <div className="h-error-col">
-                      <span className="h-err-lbl">Detected Issue</span>
-                      <span className="h-err-val">{errorType}</span>
-                    </div>
-                    <div className="h-code-col">
-                      <span className="h-code-snippet">{shortCode}</span>
-                    </div>
-                  </div>
-                  <div className="h-card-actions">
-                    <div className={`h-status ${isResolved ? 'resolved' : 'needs-work'}`}>
-                      {isResolved ? <CheckCircle size={16} /> : <XCircle size={16} />}
-                      <span>{session.status}</span>
-                    </div>
-                    <button className="h-expand-btn">
-                      {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-                  </div>
-                </div>
-
-                {isExpanded && (
-                  <div className="h-card-body fade-in">
-                    <div className="h-details-grid">
-                      <div className="h-detail-block">
-                        <span className="h-block-title">Original Input</span>
-                        <pre className="h-code-block">{session.code}</pre>
-                      </div>
-                      <div className="h-detail-block">
-                        <span className="h-block-title">AI Explanation</span>
-                        <p className="h-text-block">{session.response?.explanation || 'No explanation available.'}</p>
-                      </div>
-                      <div className="h-detail-block">
-                        <span className="h-block-title">Suggested Fix</span>
-                        <pre className="h-code-block fix">{session.response?.fix || 'No fix available.'}</pre>
-                      </div>
-                      <div className="h-detail-block">
-                        <span className="h-block-title">Learning Tip</span>
-                        <p className="h-text-block tip">{session.response?.learningTip || 'Keep coding to uncover tips!'}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })
+          <div className="empty-history-state">
+            <HistoryIcon size={64} className="empty-icon" />
+            <p>No neural sessions detected. Initiate your first analysis to begin tracking.</p>
+            <button className="primary-gold-btn" style={{ marginTop: '32px' }}>Initiate Scan</button>
+          </div>
         )}
       </div>
     </div>

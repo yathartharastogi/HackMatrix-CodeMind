@@ -4,6 +4,7 @@
   width: 100vw;
   overflow: hidden;
   background: var(--bg-main);
+  position: relative;
 }
 
 .main-wrapper {
@@ -13,13 +14,19 @@
   overflow: hidden;
   position: relative;
   background: var(--bg-main);
+  /* Sidebar handling */
+  margin-left: 300px;
+  transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-wrapper.sidebar-collapsed {
+  margin-left: 80px;
 }
 
 .content-area {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  /* Ensure children fill and scroll correctly */
   display: flex;
   flex-direction: column;
   background: var(--bg-main);
@@ -27,6 +34,10 @@
 
 @media (max-width: 768px) {
   .main-wrapper {
+    margin-left: 0;
     width: 100%;
+  }
+  .main-wrapper.sidebar-collapsed {
+    margin-left: 0;
   }
 }

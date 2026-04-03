@@ -1,304 +1,161 @@
-.history-dashboard {
+.history-page {
+  padding: 48px 60px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  overflow-y: auto;
-  height: calc(100vh - 70px);
-  background: var(--bg-main);
+  gap: 40px;
+  animation: fadeIn 0.8s ease-out;
 }
 
-.history-header {
-  margin-bottom: 0.5rem;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.history-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 0.25rem;
+.history-page-title {
+  font-family: var(--font-luxury);
+  font-size: 3rem;
+  color: #FFF;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, #FFF, var(--color-primary), #FFF);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shine 6s linear infinite;
 }
 
-.history-subtitle {
-  color: var(--text-muted);
-  font-size: 1rem;
+@keyframes shine {
+  to { background-position: 200% center; }
 }
 
 .history-controls {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.h-search-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #000;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 10px 20px;
-  border-radius: 8px;
-  flex: 1;
-  max-width: 400px;
-  transition: all 0.3s ease;
-}
-
-.h-search-box:focus-within {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-}
-
-.h-search-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text-main);
-  width: 100%;
-  font-size: 0.95rem;
-}
-
-.h-filters {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--bg-main);
-  border: 1px solid var(--border-glass);
-  padding: 8px 16px;
-  border-radius: 24px;
-}
-
-.h-select {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text-main);
-  font-size: 0.95rem;
-  cursor: pointer;
-}
-
-.h-select option {
-  background: var(--bg-main);
-  color: var(--text-main);
-}
-
-/* History List Area */
-.history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.empty-history-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem;
-  text-align: center;
-  color: var(--text-muted);
-}
-
-/* Row Cards */
-.history-card {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+  padding: 24px;
   background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #000;
+  padding: 10px 20px;
+  border-radius: 10px;
   border: 1px solid var(--border-glass);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  border-radius: 8px;
+  width: 380px;
+  transition: all 0.2s ease;
 }
 
-.history-card:hover {
-  border-color: var(--color-secondary);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
-  transform: translateY(-2px);
-}
-
-.history-card.expanded {
+.search-container:focus-within {
   border-color: var(--color-primary);
-  box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
 }
 
-.h-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 1.5rem;
-  cursor: pointer;
-  gap: 1.5rem;
-}
-
-.h-card-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 120px;
-}
-
-.h-lang-badge {
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: var(--bg-main);
-  background: var(--color-primary);
-  padding: 3px 10px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 0 8px rgba(0, 242, 255, 0.4);
-}
-
-.h-time {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.h-card-main-info {
+.search-input {
+  background: transparent;
+  color: #FFF;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  font-size: 0.9rem;
 }
 
-.h-error-col {
+.history-table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th {
+  padding: 24px 32px;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-primary);
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px solid var(--border-gold);
+}
+
+.history-table td {
+  padding: 24px 32px;
+  color: #DDD;
+  border-bottom: 1px solid var(--border-glass);
+  font-size: 0.95rem;
+}
+
+.history-table tr:hover td {
+  background: rgba(212, 175, 55, 0.03);
+  color: #FFF;
+}
+
+.lang-badge {
+  padding: 4px 12px;
+  border-radius: 30px;
+  background: #000;
+  border: 1px solid var(--border-glass);
+  color: #FFF;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.status-cell {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.h-err-lbl {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.h-err-val {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--error);
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
 
-.h-code-col {
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 0.85rem;
+.status-resolved .status-dot { background: #00FFCC; box-shadow: 0 0 8px #00FFCC; }
+.status-needs-improvement .status-dot { background: #FF4D4D; box-shadow: 0 0 8px #FF4D4D; }
+
+.action-menu-btn {
+  padding: 8px;
+  color: var(--text-muted);
+  border-radius: 6px;
+}
+
+.action-menu-btn:hover {
+  background: rgba(212, 175, 55, 0.1);
   color: var(--color-primary);
-  background: #000;
-  padding: 8px 14px;
-  border-radius: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 500px;
-  border-left: 2px solid var(--color-primary);
 }
 
-.h-card-actions {
+.empty-history-state {
+  padding: 80px;
+  text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 24px;
 }
 
-.h-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
+.empty-icon {
+  color: var(--border-gold);
+  opacity: 0.3;
 }
 
-.h-status.resolved { color: #48bb78; }
-.h-status.needs-work { color: #ed8936; }
-
-.h-expand-btn {
-  background: transparent;
-  border: none;
+.empty-history-state p {
   color: var(--text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-/* Expanded Body */
-.h-card-body {
-  padding: 0 1.5rem 1.5rem 1.5rem;
-  border-top: 1px dashed var(--border-glass);
-  background: var(--bg-main);
-}
-
-.h-details-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.h-detail-block {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.h-block-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.h-code-block {
-  margin: 0;
-  padding: 1rem;
-  background: var(--bg-main);
-  border: 1px solid var(--border-glass);
-  border-radius: 8px;
-  color: var(--text-main);
-  font-family: 'Fira Code', monospace;
-  font-size: 0.9rem;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.h-code-block.fix {
-  border-color: rgba(72, 187, 120, 0.4);
-}
-
-.h-text-block {
-  margin: 0;
-  padding: 1rem;
-  background: var(--bg-card);
-  border-radius: 8px;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.h-text-block.tip {
-  background: rgba(126, 160, 197, 0.1);
-  border: 1px dashed var(--border-glass);
-  color: var(--color-highlight);
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .h-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .h-card-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
+  font-size: 1.1rem;
+  font-weight: 500;
 }

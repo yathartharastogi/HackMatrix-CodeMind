@@ -40,6 +40,7 @@ const Sidebar = ({ isOpen, isCollapsed, toggleSidebar }) => {
               <li key={index}>
                 <NavLink
                   to={item.path}
+                  end={item.path === '/dashboard'}
                   onClick={() => { if(window.innerWidth <= 768) toggleSidebar() }}
                   className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
                   title={isCollapsed ? item.label : ''}

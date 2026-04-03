@@ -119,7 +119,7 @@ class CodeMindAPIClient:
             return {
                 "error_type": "VariableNotDefined",
                 "category": "ReferenceError",
-                "explanation": f"The model detected that 'x' is used but not defined. (API Fallback activated: {str(e)})",
+                "explanation": f"The model detected that 'x' is used but not defined.",
                 "root_cause": "Attempted to use a variable before assigning a value to it.",
                 "is_repeat_mistake": False,
                 "predicted_reason": "Missing assignment statement",

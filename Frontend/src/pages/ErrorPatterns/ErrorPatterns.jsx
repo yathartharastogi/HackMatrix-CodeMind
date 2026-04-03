@@ -1,49 +1,47 @@
 import React, { useState } from 'react';
-import { Target, Activity, AlertTriangle, ChevronDown, ChevronUp, Cpu, Lightbulb } from 'lucide-react';
+import { Target, Activity, AlertTriangle, ChevronDown, ChevronUp, Cpu, Lightbulb, TrendingUp } from 'lucide-react';
 import './ErrorPatterns.css';
 
 const ErrorPatterns = ({ errorHistory = [] }) => {
   const [filter, setFilter] = useState('All');
   const [expandedCardId, setExpandedCardId] = useState(null);
 
-  // Derive metrics
   const totalErrors = errorHistory.length;
-  // Basic mock map for unique errors to count them
   const errorCounts = errorHistory.reduce((acc, session) => {
-    const errType = session.response?.error?.split(':')[0] || 'Unknown Error';
+    const errType = session.response?.errorType || 'Logical Pattern';
     acc[errType] = (acc[errType] || 0) + 1;
     return acc;
   }, {});
   
-  // Highest occurrence
   const mostFrequent = Object.keys(errorCounts).sort((a,b) => errorCounts[b] - errorCounts[a])[0] || 'None';
-  
-  // Weakest topic arbitrarily selected if not empty
-  const weakestTopic = errorHistory.length > 0 ? (errorHistory[0].response?.patternInsight || 'Concepts') : 'Start Coding';
+  const weakestTopic = errorHistory.length > 0 ? (errorHistory[0].response?.category || 'Concepts') : 'Start Coding';
 
   const mockPatterns = [
     {
       id: 1,
       type: "ReferenceError",
       count: errorCounts["ReferenceError"] || 5,
-      explanation: "You are attempting to access a variable or object property that has not been properly instantiated in memory.",
-      suggestion: "Always trace variable scope declarations (let/const) and ensure they exist prior to invocation.",
-      improvement: 45 // percent
+      explanation: "Attempting to access variables that have not been properly instantiated in memory.",
+      suggestion: "Trace variable scope declarations and ensure they exist prior to invocation.",
+      prevalence: "High",
+      improvement: 45
     },
     {
       id: 2,
       type: "SyntaxError",
       count: errorCounts["SyntaxError"] || 3,
-      explanation: "A missing bracket, comma, or undeclared string terminator is breaking the compiler parsing.",
-      suggestion: "Make use of your IDE's formatting tools (Prettier) and double-check nested object declarations.",
+      explanation: "Broken compiler parsing due to missing brackets, commas, or string terminators.",
+      suggestion: "Use Prettier formatting and double-check nested object declarations.",
+      prevalence: "Medium",
       improvement: 80
     },
     {
       id: 3,
       type: "TypeError",
       count: errorCounts["TypeError"] || 2,
-      explanation: "An operation was performed on a value of the wrong type (e.g., calling a localized string as a function).",
-      suggestion: "Add types using TypeScript, or implement strict strict equality checks (typeof) before complex operations.",
+      explanation: "Operations performed on values of the wrong type (e.g., calling a string as a function).",
+      suggestion: "Implement strict equality checks and consider TypeScript for type safety.",
+      prevalence: "Low",
       improvement: 60
     }
   ];
@@ -55,81 +53,84 @@ const ErrorPatterns = ({ errorHistory = [] }) => {
   };
 
   return (
-    <div className="patterns-dashboard fade-in">
+    <div className="patterns-page animate-fade-up">
       <div className="patterns-header">
-        <h1 className="patterns-title">Your Coding Patterns</h1>
-        <p className="patterns-subtitle">CodeMind tracks your mistakes to uncover blind spots and accelerate your learning.</p>
+        <h1 className="patterns-title">Neural <span className="text-gold">Patterns</span></h1>
+        <p className="patterns-subtitle">CodeMind maps your logical blind spots to accelerate your neural growth.</p>
       </div>
 
-      <div className="patterns-metrics-grid">
-        <div className="metric-box glass-panel">
-          <Activity size={20} className="text-highlight mb-2" />
-          <span className="metric-box-val">{totalErrors}</span>
-          <span className="metric-box-label">Total Analyzed</span>
-        </div>
-        <div className="metric-box glass-panel text-center">
-          <AlertTriangle size={20} className="text-error mb-2" />
-          <span className="metric-box-val text-error">{mostFrequent}</span>
-          <span className="metric-box-label">Most Frequent</span>
-        </div>
-        <div className="metric-box glass-panel">
-          <Target size={20} className="code-blue mb-2" />
-          <span className="metric-box-val" style={{fontSize: '1.2rem'}}>{weakestTopic}</span>
-          <span className="metric-box-label">Weakest Topic</span>
-        </div>
-        <div className="metric-box glass-panel">
-          <Activity size={20} className="text-success mb-2" />
-          <span className="metric-box-val text-success">+24%</span>
-          <span className="metric-box-label">Improvement Score</span>
-        </div>
-      </div>
-
-      <div className="patterns-main glass-panel">
-        <div className="patterns-controls">
-          <div className="patterns-tabs">
-            <button className={`p-tab ${filter === 'All' ? 'active' : ''}`} onClick={() => setFilter('All')}>All</button>
-            <button className={`p-tab ${filter === 'Syntax' ? 'active' : ''}`} onClick={() => setFilter('Syntax')}>Syntax</button>
-            <button className={`p-tab ${filter === 'Error' ? 'active' : ''}`} onClick={() => setFilter('Error')}>Logic Errors</button>
+      <div className="patterns-grid">
+        <div className="pattern-card glass-panel group">
+          <div className="pattern-header">
+            <div className="pattern-icon"><Activity size={24} /></div>
+            <span className="pattern-count">{totalErrors}</span>
           </div>
-          <div className="p-search">
-            <input type="text" placeholder="Search patterns..." className="p-search-input" />
+          <div className="pattern-content">
+            <h3 className="pattern-title">Sessions Mapped</h3>
+            <p className="pattern-desc">Total code structures analyzed by the neural engine.</p>
           </div>
         </div>
 
-        <div className="patterns-list">
-          {filteredPatterns.map(pattern => (
-            <div key={pattern.id} className={`pattern-card ${expandedCardId === pattern.id ? 'expanded' : ''}`}>
-              
-              <div className="pattern-card-header" onClick={() => toggleExpand(pattern.id)}>
-                <div className="pattern-title-group">
-                  <h3 className="pattern-type">{pattern.type}</h3>
-                  <span className="pattern-count">Occurred {pattern.count} times</span>
+        <div className="pattern-card glass-panel group">
+          <div className="pattern-header">
+            <div className="pattern-icon"><AlertTriangle size={24} className="text-error" /></div>
+            <span className="pattern-count text-error">!</span>
+          </div>
+          <div className="pattern-content">
+            <h3 className="pattern-title">Frequent: {mostFrequent}</h3>
+            <p className="pattern-desc">Your most recurring logical dissonance across all sessions.</p>
+          </div>
+        </div>
+
+        <div className="pattern-card glass-panel group">
+          <div className="pattern-header">
+            <div className="pattern-icon"><Target size={24} /></div>
+            <span className="pattern-count">{weakestTopic.charAt(0)}</span>
+          </div>
+          <div className="pattern-content">
+            <h3 className="pattern-title">Weak Node: {weakestTopic}</h3>
+            <p className="pattern-desc">The concept requiring the most immediate cognitive focus.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="insights-heading" style={{ marginTop: '20px' }}>
+         Deep Diagnostic Report
+      </div>
+
+      <div className="patterns-grid" style={{ gridTemplateColumns: '1fr' }}>
+        {filteredPatterns.map(pattern => (
+          <div key={pattern.id} className="pattern-card glass-panel" style={{ cursor: 'pointer' }} onClick={() => toggleExpand(pattern.id)}>
+            <div className="pattern-header" style={{ marginBottom: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                <div className="pattern-icon"><Cpu size={20} /></div>
+                <div>
+                   <h3 className="pattern-title" style={{ marginBottom: '4px' }}>{pattern.type}</h3>
+                   <span className="prevalence-label">PREVALENCE: <span className="prevalence-rate">{pattern.prevalence}</span></span>
                 </div>
-                <div className="pattern-improvement">
-                  <div className="imp-bar"><div className="imp-fill" style={{width: `${pattern.improvement}%`}}></div></div>
-                  <span>{pattern.improvement}%</span>
-                </div>
-                <button className="expand-btn">
-                  {expandedCardId === pattern.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                </button>
               </div>
-
-              {expandedCardId === pattern.id && (
-                <div className="pattern-card-body fade-in">
-                  <div className="pattern-insight">
-                    <span className="insight-lbl"><Cpu size={14} className="icon-pattern"/> Explanation</span>
-                    <p>{pattern.explanation}</p>
-                  </div>
-                  <div className="pattern-suggestion">
-                    <span className="insight-lbl"><Lightbulb size={14} className="icon-tip"/> AI Suggestion</span>
-                    <p>{pattern.suggestion}</p>
-                  </div>
-                </div>
-              )}
-
+              <div style={{ textAlign: 'right' }}>
+                <div className="pattern-count" style={{ fontSize: '1.2rem', opacity: 1, color: 'var(--color-primary)' }}>{pattern.improvement}%</div>
+                <span className="prevalence-label">MASTERY</span>
+              </div>
             </div>
-          ))}
-        </div>
+
+            {expandedCardId === pattern.id && (
+              <div className="animate-fade-up" style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid var(--border-glass)' }}>
+                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+                    <div>
+                       <span className="prevalence-label" style={{ display: 'block', marginBottom: '12px' }}>Cognitive Explanation</span>
+                       <p className="pattern-desc" style={{ color: '#FFF' }}>{pattern.explanation}</p>
+                    </div>
+                    <div>
+                       <span className="prevalence-label" style={{ display: 'block', marginBottom: '12px' }}>Neural Correction</span>
+                       <p className="pattern-desc" style={{ color: 'var(--color-primary)' }}>{pattern.suggestion}</p>
+                    </div>
+                 </div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

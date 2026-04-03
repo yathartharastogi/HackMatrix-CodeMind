@@ -47,14 +47,14 @@ const LandingPage = () => {
       />
 
       {/* Floating Gradient Orbs */}
-      <div className="orb orb-cyan"></div>
-      <div className="orb orb-purple"></div>
+      <div className="orb orb-gold"></div>
+      <div className="orb orb-dark"></div>
 
       {/* Navigation */}
       <nav className="nav-wrapper">
-        <div className="pill-navbar glass-panel">
+        <div className="pill-navbar">
           <div className="nav-brand-group" onClick={() => navigate('/')}>
-            <img src="/LOGO.jpeg" alt="CodeMind Logo" className="logo-img" />
+            <div className="logo-img">M</div>
             <span className="brand-name">CodeMind</span>
           </div>
           
@@ -73,8 +73,8 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <header className="hero-section">
-        <div className="hero-content">
-          <div className="neural-badge glass-panel">
+        <div className="hero-content animate-fade-up">
+          <div className="neural-badge">
             <div className="pulse-dot"></div>
             <span>Neural Engine Live</span>
           </div>
@@ -86,14 +86,14 @@ const LandingPage = () => {
             and optimizes your execution paths in real-time.
           </p>
           <div className="hero-actions">
-            <button className="primary-cta-btn" onClick={handleCtaClick}>
-              Start Debugging Free <ArrowRight size={20} />
+            <button className="signup-btn" style={{ padding: '16px 48px', fontSize: '1rem' }} onClick={handleCtaClick}>
+              Explore Neural Nodes <ArrowRight size={20} />
             </button>
           </div>
         </div>
 
         <div className="hero-visual">
-          <div className="mockup-window glass-panel">
+          <div className="mockup-window">
             <div className="window-header">
               <div className="dot red"></div>
               <div className="dot yellow"></div>
@@ -117,9 +117,9 @@ const LandingPage = () => {
               </pre>
               
               {/* Floating AI Insight Card */}
-              <div className="ai-insight-popup glass-panel fade-in">
+              <div className="ai-insight-popup">
                 <div className="insight-header">
-                  <Sparkles size={16} className="text-cyan" />
+                  <Sparkles size={16} className="text-gold" />
                   <span>AI Insight</span>
                 </div>
                 <p>Propagate() leads to a recursive loop in concurrent environments.</p>
@@ -132,13 +132,13 @@ const LandingPage = () => {
       </header>
 
       {/* Neural Architecture (Bento Grid) */}
-      <section id="features" className="features-section">
+      <section id="features" className="features-section animate-fade-up">
         <h2 className="section-title">Neural Architecture</h2>
         <div className="bento-grid">
           {/* Card 1: Data Viz (Large) */}
-          <div className="bento-card card-large glass-panel">
+          <div className="bento-card card-large">
             <div className="card-header">
-              <BarChart3 className="text-cyan" />
+              <BarChart3 className="text-gold" />
               <h3>Logic Pattern Analysis</h3>
             </div>
             <div className="graph-mockup">
@@ -158,27 +158,27 @@ const LandingPage = () => {
           </div>
 
           {/* Card 2: Interactive Toggle */}
-          <div className="bento-card card-small glass-panel">
+          <div className="bento-card card-small">
             <div className="card-header">
-              <Cpu className="text-purple" />
+              <Cpu className="text-gold" />
               <h3>Execution Engine</h3>
             </div>
             <div className="toggle-preview">
               <div className="toggle-track">
-                <div className="toggle-thumb"></div>
+                <div className="toggle-thumb" style={{ marginLeft: 'auto' }}></div>
               </div>
               <div className="toggle-labels">
-                <span className="active">FIX</span>
-                <span>LEARN</span>
+                <span>FIX</span>
+                <span className="text-gold">LEARN</span>
               </div>
             </div>
             <p className="card-desc">Switch between auto-healing and guided learning paths.</p>
           </div>
 
           {/* Card 3: Shield */}
-          <div className="bento-card card-small glass-panel">
+          <div className="bento-card card-small">
             <div className="card-header">
-              <ShieldCheck className="text-cyan" />
+              <ShieldCheck className="text-gold" />
               <h3>74% Prevented</h3>
             </div>
             <div className="stat-circle">
@@ -190,9 +190,9 @@ const LandingPage = () => {
           </div>
 
           {/* Card 4: Terminal */}
-          <div className="bento-card card-medium glass-panel">
+          <div className="bento-card card-medium">
             <div className="card-header">
-              <Terminal className="text-secondary" />
+              <Terminal className="text-gold" />
               <h3>Real-time Logs</h3>
             </div>
             <div className="terminal-mini">
@@ -205,13 +205,13 @@ const LandingPage = () => {
         </div>
       </section>
       {/* Final CTA */}
-      <section className="final-cta-section">
-        <div className="cta-container glass-panel">
+      <section className="final-cta-section animate-fade-up">
+        <div className="cta-container">
           <div className="cta-glow"></div>
-          <h2>Ready to evolve your logic?</h2>
+          <h2>Ready to evolve?</h2>
           <p>Join the thousands of developers building resilient code with CodeMind.</p>
-          <button className="primary-cta-btn" onClick={handleCtaClick}>
-            Join Node Access <ArrowRight size={20} />
+          <button className="signup-btn" style={{ padding: '20px 60px', fontSize: '1.1rem' }} onClick={handleCtaClick}>
+            Join Node Access <ArrowRight size={22} />
           </button>
         </div>
       </section>
@@ -219,11 +219,11 @@ const LandingPage = () => {
       <footer className="landing-footer">
         <div className="footer-content">
           <div className="footer-brand">
-            <div className="nav-logo">
-              <Command className="logo-icon" size={20} />
-              <span>CodeMind</span>
+            <div className="nav-brand-group">
+              <div className="logo-img" style={{ width: '44px', height: '44px', fontSize: '1.5rem' }}>M</div>
+              <span className="brand-name" style={{ fontSize: '1.8rem' }}>CodeMind</span>
             </div>
-            <p>Evolving the future of logical execution.</p>
+            <p>Evolving the future of logical execution at scale.</p>
           </div>
           
           <div className="footer-column">

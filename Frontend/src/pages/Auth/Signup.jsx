@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
-import { AlertTriangle, Loader, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 import './Auth.css';
 
 const Signup = () => {
@@ -18,86 +18,65 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     if (!fullName || !email || !password) {
-      setErrorMsg('Please fill in all required fields.');
-      return;
-    }
-
-    if (password.length < 6) {
-      setErrorMsg('Password must be at least 6 characters long.');
+      setErrorMsg('All cognitive nodes required.');
       return;
     }
 
     setLoading(true);
     setErrorMsg('');
-    setSuccessMsg('');
 
-    // Pre-emptive check to avoid "Failed to fetch" console errors with placeholder URL
     if (supabase.supabaseUrl.includes('placeholder.supabase.co')) {
-      setErrorMsg("Configuration Required: Please set your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in the .env file.");
+      setErrorMsg("Configuration Required: .env keys missing.");
       setLoading(false);
       return;
     }
 
     try {
-      // Step 1: Create user in securely managed Supabase auth backend
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+      const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
 
       if (authError) {
-        setErrorMsg(authError.message || 'Failed to securely create credential.');
+        setErrorMsg(authError.message || 'Failed to initialize session.');
         setLoading(false);
         return;
       }
 
-      // Step 2: Attempt pushing mapping record to explicit structural Custom "Auth" profiling table
       if (authData?.user) {
-        const { error: dbError } = await supabase
+        await supabase
           .from('Auth')
           .insert({
             fullname: fullName,
             emailaddress: email,
             gender: gender,
           });
-
-        if (dbError) {
-          console.error("Profile insert block failed:", dbError);
-          setErrorMsg('Auth succeeded, but profile mapping blocked depending on RLS. Routing anyway...');
-        }
       }
 
-      setSuccessMsg('Account created securely! Routing to dashboard...');
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1500);
+      setSuccessMsg('Session initialized. Accessing dashboard...');
+      setTimeout(() => navigate('/dashboard'), 1500);
 
     } catch (err) {
-      setErrorMsg("Network error: Could not connect to Supabase. Ensure your .env keys are properly configured.");
+      setErrorMsg("Trace failed: Handshake timed out.");
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-layout fade-in">
-      <div className="auth-card">
+    <div className="auth-wrapper">
+      <div className="auth-container animate-fade-up">
         
         <div className="auth-header">
-          <div className="auth-logo-icon">C</div>
-          <h1 className="auth-title">Join CodeMind</h1>
-          <p className="auth-subtitle">Create an account to start analyzing your code.</p>
+          <div className="auth-logo">Join CodeMind</div>
+          <span className="auth-subtitle">CREATE YOUR NODE</span>
         </div>
 
         {errorMsg && (
-          <div className="auth-error-msg fade-in">
+          <div className="auth-error animate-fade-up">
             <AlertTriangle size={16} />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="auth-error-msg fade-in" style={{ backgroundColor: 'rgba(72,187,120,0.1)', borderColor: 'rgba(72,187,120,0.3)', color: '#48bb78' }}>
-            <CheckCircle size={16} />
+          <div className="auth-error animate-fade-up" style={{ backgroundColor: 'rgba(0,255,204,0.05)', color: '#00FFCC', borderColor: 'rgba(0,255,204,0.1)' }}>
             <span>{successMsg}</span>
           </div>
         )}
@@ -109,60 +88,48 @@ const Signup = () => {
             <input 
               type="text" 
               className="form-input" 
-              placeholder="e.g. Neo Anderson"
+              placeholder="operator.name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Email Address</label>
+            <label className="form-label">Email Node</label>
             <input 
               type="email" 
               className="form-input" 
-              placeholder="you@example.com"
+              placeholder="operator@codemind.ai"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Gender</label>
-            <select 
-              className="form-select"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Non-binary">Non-binary</option>
-              <option value="Prefer not to say">Prefer not to say</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Password</label>
+            <label className="form-label">Sequence (Password)</label>
             <input 
               type="password" 
               className="form-input" 
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
           <button 
             type="submit" 
-            className="primary-cta-btn" 
-            style={{ width: '100%', marginTop: '10px' }}
+            className="auth-btn-primary" 
             disabled={loading}
           >
-            {loading ? <Loader className="spinner" size={20} /> : 'Create Account'}
+            {loading ? <Loader2 className="animate-spin" size={20} /> : 'Initialize Node'}
           </button>
         </form>
 
         <div className="auth-footer">
-          Already have an account? <Link to="/login" className="auth-link">Log In</Link>
+          Existing node? <Link to="/login" className="auth-link">Establish Session</Link>
         </div>
 
       </div>

@@ -1,101 +1,100 @@
 import React from 'react';
-import { User, Activity, CheckCircle, TrendingUp, History, Zap } from 'lucide-react';
+import { User, Mail, Award, Clock, Activity, Target, Settings, LogOut, Code, ChevronRight } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
-const Profile = ({ errorHistory }) => {
-  const totalSolved = errorHistory.length;
-  // Mock logic for improved rate
-  const improvementRate = totalSolved > 0 ? "+12%" : "0%";
+const Profile = ({ errorHistory = [] }) => {
+  const { session, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
+  const userStats = [
+    { label: "Neural Score", value: "840", icon: <Activity size={20} /> },
+    { label: "Sessions", value: errorHistory.length, icon: <Clock size={20} /> },
+    { label: "Accuracy", value: "+18%", icon: <Target size={20} /> },
+    { label: "Rank", value: "Elite", icon: <Award size={20} /> },
+  ];
 
   return (
-    <div className="profile-dashboard fade-in">
-      
-      {/* Overview Card */}
-      <section className="profile-overview-card glass-panel">
-        <div className="profile-avatar-large">
-          <User size={48} />
-        </div>
-        <div className="profile-details">
-          <h1 className="profile-name-large">Harsh</h1>
-          <p className="profile-email-large">harsh@codemind.ai</p>
-          <div className="profile-badges">
-            <span className="skill-badge-large"><Zap size={14} /> Intermediate Developer</span>
-            <span className="achievement-badge"><CheckCircle size={14} /> Bug Squasher</span>
-          </div>
-        </div>
-      </section>
+    <div className="profile-page animate-fade-up">
+      <div className="profile-header glass-panel">
+         <div className="profile-avatar-large">H</div>
+         <div className="profile-main-info">
+            <h1 className="profile-name-title">Harsh Vardhan</h1>
+            <p className="profile-rank">PRO NODE • {session?.user?.email || 'harsh@codemind.ai'}</p>
+         </div>
+         <div style={{ display: 'flex', gap: '16px' }}>
+            <button className="secondary-gold-btn" style={{ padding: '10px 20px', borderRadius: '10px' }}>
+               <Settings size={18} style={{ marginRight: '8px' }} /> SETTINGS
+            </button>
+            <button className="secondary-gold-btn" onClick={handleLogout} style={{ padding: '10px 20px', borderRadius: '10px', color: '#FF4D4D', borderColor: 'rgba(255, 77, 77, 0.2)' }}>
+               <LogOut size={18} style={{ marginRight: '8px' }} /> DISCONNECT
+            </button>
+         </div>
+      </div>
 
-      {/* Metrics Row */}
-      <section className="profile-metrics-row">
-        <div className="metric-card glass-panel group">
-          <div className="metric-icon-wrapper">
-            <Activity size={24} className="metric-icon code-teal" />
-          </div>
-          <div className="metric-data">
-            <h3 className="metric-value">{totalSolved}</h3>
-            <p className="metric-label">Total Errors Solved</p>
-          </div>
-        </div>
-        <div className="metric-card glass-panel group">
-          <div className="metric-icon-wrapper">
-            <TrendingUp size={24} className="metric-icon code-blue" />
-          </div>
-          <div className="metric-data">
-            <h3 className="metric-value text-success">{improvementRate}</h3>
-            <p className="metric-label">Improvement Rate</p>
-          </div>
-        </div>
-      </section>
+      <div className="profile-stats-grid">
+         {userStats.map((stat, i) => (
+           <div key={i} className="p-stat-card">
+              <span className="p-stat-label">{stat.label}</span>
+              <div className="p-stat-value">{stat.value}</div>
+              <div className="p-stat-icon">{stat.icon}</div>
+           </div>
+         ))}
+      </div>
 
-      {/* Main Content Split */}
-      <div className="profile-main-split">
-        
-        {/* Left: Progression */}
-        <section className="progression-section glass-panel">
-          <h2 className="section-title">Skill Progression</h2>
-          <div className="progression-path">
-            <div className="skill-track">
-              <div className="skill-node completed">Beginner</div>
-              <div className="skill-line completed"></div>
-              <div className="skill-node current">Intermediate</div>
-              <div className="skill-line pending"></div>
-              <div className="skill-node pending">Advanced</div>
+      <div className="profile-performance">
+         <div className="p-activity-card">
+            <div className="perf-header">
+               <Activity size={20} /> Neural Flux History
             </div>
-            
-            <div className="xp-container">
-              <div className="xp-header">
-                <span>Current XP: 3,450</span>
-                <span>Next Rank: 5,000</span>
-              </div>
-              <div className="progress-bg mt-2">
-                <div className="progress-fill bg-highlight" style={{ width: '69%' }}></div>
-              </div>
+            <div className="activity-list">
+               {errorHistory.slice(0, 4).map((session, i) => (
+                 <div key={i} className="activity-item">
+                    <div className="activity-info">
+                       <div className="activity-icon"><Code size={20} /></div>
+                       <div className="activity-text">
+                          <span className="activity-title">{session.language} Session</span>
+                          <span className="activity-time">{new Date(session.date).toLocaleDateString()} at {new Date(session.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                       </div>
+                    </div>
+                    <div className={`activity-status-badge ${session.status === 'Resolved' ? 'status-resolved' : 'status-pending'}`}>
+                       {session.status}
+                    </div>
+                 </div>
+               ))}
             </div>
-          </div>
-        </section>
+            <button 
+              className="primary-gold-btn" 
+              style={{ width: '100%', marginTop: '32px', padding: '16px', borderRadius: '12px' }}
+              onClick={() => navigate('/dashboard/history')}
+            >
+               VIEW ALL SESSIONS <ChevronRight size={18} />
+            </button>
+         </div>
 
-        {/* Right: Recent Sessions */}
-        <section className="recent-sessions-section glass-panel custom-scrollbar">
-          <h2 className="section-title"><History size={18} /> Recent Sessions</h2>
-          <div className="sessions-list">
-            {errorHistory.length === 0 ? (
-              <p className="empty-state-text">No recent coding sessions found.</p>
-            ) : (
-              errorHistory.slice(0, 5).map((session, idx) => (
-                <div key={idx} className="session-item">
-                  <div className="session-header">
-                    <span className="session-lang">{session.language}</span>
-                    <span className="session-date">{new Date(session.date).toLocaleDateString()}</span>
-                  </div>
-                  <div className="session-error">
-                    {session.response?.error?.split(':')[0] || 'Syntax Error'}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </section>
-
+         <div className="p-activity-card">
+            <div className="perf-header">
+               <Target size={20} /> Cognitive Mastery
+            </div>
+            <p className="activity-time" style={{ marginBottom: '24px' }}>Ranked in top 5% of neural explorers.</p>
+            <div className="p-skills-list">
+               <span className="skill-tag">Performance Logic</span>
+               <span className="skill-tag">Asynchronous Patterns</span>
+               <span className="skill-tag">Functional Integrity</span>
+               <span className="skill-tag">High-Order Flow</span>
+               <span className="skill-tag">Recursive Synthesis</span>
+            </div>
+         </div>
       </div>
     </div>
   );

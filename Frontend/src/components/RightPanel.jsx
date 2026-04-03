@@ -103,16 +103,7 @@ const RightPanel = ({ isLoading, aiResponse }) => {
 
       </div>
 
-      <div className="ai-footer">
-        <button 
-           disabled={isLoading || !aiResponse}
-           className={`practice-btn ${isLoading || !aiResponse ? 'disabled' : ''}`}
-        >
-          <span>Deep Dive Study</span>
-          <ChevronRight size={16} />
-        </button>
-      </div>
-
+      {/* ai-footer section removed as requested */}
     </aside>
   );
 };

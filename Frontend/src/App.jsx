@@ -21,7 +21,7 @@ const DashboardLayout = ({ toggleSidebar, isSidebarOpen, isSidebarCollapsed }) =
   <div className="app-container">
     <Sidebar isOpen={isSidebarOpen} isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
     
-    <div className="main-wrapper">
+    <div className={`main-wrapper ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <Topbar toggleSidebar={toggleSidebar} />
       <main className="content-area">
         <Outlet />
