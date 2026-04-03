@@ -69,7 +69,7 @@ const Signup = () => {
 
       setSuccessMsg('Account created securely! Routing to dashboard...');
       setTimeout(() => {
-        navigate('/');
+        navigate('/dashboard');
       }, 1500);
 
     } catch (err) {

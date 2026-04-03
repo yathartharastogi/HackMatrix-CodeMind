@@ -40,7 +40,7 @@ const Login = () => {
       } else {
         // Upon success, AuthContext triggers an update natively,
         // we navigate directly
-        navigate('/');
+        navigate('/dashboard');
       }
     } catch (err) {
       console.error(err);

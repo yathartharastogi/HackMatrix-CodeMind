@@ -14,4 +14,12 @@ if (!supabaseAnonKey) {
   supabaseAnonKey = 'placeholder-anon-key';
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storageKey: 'codemind-auth-token', // Unique storage key to avoid localhost conflicts
+    flowType: 'pkce' // More robust flow type for modern environments
+  }
+});

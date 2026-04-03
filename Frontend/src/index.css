@@ -1,19 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap');
 
 :root {
-  --bg-main: #121212;
-  --bg-sidebar: #121212;
-  --bg-card: #1A1A1A;
-  --bg-card-hover: rgba(26, 26, 26, 0.8);
+  --bg-main: #0A0A0A; /* Deeper black */
+  --bg-sidebar: #0A0A0A;
+  --bg-card: rgba(22, 22, 22, 0.7);
+  --bg-card-hover: rgba(30, 30, 30, 0.8);
   --color-primary: #00F2FF; /* Neon Cyan */
   --color-secondary: #A855F7; /* Neon Purple */
   --color-tertiary: #1188EE; /* High-tech Blue */
   --text-main: #ffffff;
   --text-muted: #94A3B8; 
-  --border-glass: rgba(0, 242, 255, 0.1); 
-  --font-base: 'Quicksand', sans-serif;
-  --neon-glow: 0 0 15px rgba(0, 242, 255, 0.3);
-  --purple-glow: 0 0 15px rgba(168, 85, 247, 0.3);
+  --border-glass: rgba(255, 255, 255, 0.08); 
+  --font-base: 'Inter', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+  --neon-glow: 0 0 20px rgba(0, 242, 255, 0.4);
+  --purple-glow: 0 0 20px rgba(168, 85, 247, 0.4);
 }
 
 * {
@@ -32,6 +33,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
   letter-spacing: 1px;
   font-weight: 700;
   text-transform: uppercase;
@@ -150,6 +152,39 @@ button {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+/* Neon Loading Overlay */
+.auth-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-main);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 9999;
+  color: var(--color-primary);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.loader-neon {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0, 242, 255, 0.1);
+  border-top: 3px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spinner 0.8s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+}
+
+/* Background Utilities */
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 30px 30px;
+}
+
 @keyframes spinner {
   to { transform: rotate(360deg); }
 }
@@ -157,3 +192,4 @@ button {
 .spinner {
   animation: spinner 1s linear infinite;
 }
+

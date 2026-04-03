@@ -1,16 +1,32 @@
-.app-layout {
+.app-container {
   display: flex;
-  flex-direction: column;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
   background: var(--bg-main);
 }
 
-.content-layout {
+.main-wrapper {
   display: flex;
+  flex-direction: column;
   flex: 1;
   overflow: hidden;
   position: relative;
   background: var(--bg-main);
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Ensure children fill and scroll correctly */
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+}
+
+@media (max-width: 768px) {
+  .main-wrapper {
+    width: 100%;
+  }
 }

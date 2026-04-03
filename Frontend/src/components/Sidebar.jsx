@@ -9,11 +9,11 @@ const Sidebar = ({ isOpen, isCollapsed, toggleSidebar }) => {
   
   const displayName = userProfile?.fullname || 'User';
   const menuItems = [
-    { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/' },
-    { icon: <Code size={20} />, label: 'Analyze Code', path: '/analyze' },
-    { icon: <AlertTriangle size={20} />, label: 'Error Patterns', path: '/patterns' },
-    { icon: <Lightbulb size={20} />, label: 'Learning Insights', path: '/insights' },
-    { icon: <Clock size={20} />, label: 'History', path: '/history' },
+    { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/dashboard' },
+    { icon: <Code size={20} />, label: 'Analyze Code', path: '/dashboard/analyze' },
+    { icon: <AlertTriangle size={20} />, label: 'Error Patterns', path: '/dashboard/patterns' },
+    { icon: <Lightbulb size={20} />, label: 'Learning Insights', path: '/dashboard/insights' },
+    { icon: <Clock size={20} />, label: 'History', path: '/dashboard/history' },
   ];
 
   return (
@@ -55,7 +55,7 @@ const Sidebar = ({ isOpen, isCollapsed, toggleSidebar }) => {
         </nav>
 
         {/* Interactive Bottom Profile Block */}
-        <NavLink to="/profile" className="sidebar-profile-block" title={isCollapsed ? "View Profile" : ''}>
+        <NavLink to="/dashboard/profile" className="sidebar-profile-block" title={isCollapsed ? "View Profile" : ''}>
           <div className="s-profile-avatar">
             <User size={20} color="var(--bg-main)" />
           </div>

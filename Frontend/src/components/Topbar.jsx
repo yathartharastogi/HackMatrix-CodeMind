@@ -76,7 +76,7 @@ const Topbar = ({ toggleSidebar }) => {
             </div>
 
             <div className="profile-dropdown-menu">
-              <NavLink to="/profile" className="dropdown-item" onClick={() => setIsProfileMenuOpen(false)}>
+              <NavLink to="/dashboard/profile" className="dropdown-item" onClick={() => setIsProfileMenuOpen(false)}>
                 <User size={16} /> View Profile
               </NavLink>
               <button className="dropdown-item">

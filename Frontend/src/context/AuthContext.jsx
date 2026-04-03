@@ -14,49 +14,72 @@ export const AuthProvider = ({ children }) => {
 
   // Helper to fetch custom profile
   const fetchProfile = async (email) => {
+    if (!email) return;
     try {
-      const { data, error } = await supabase
+      // Use a timeout for the DB query to prevent hanging the whole app
+      const profilePromise = supabase
         .from('Auth')
         .select('*')
         .eq('emailaddress', email)
         .single();
+      
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 3000)
+      );
+
+      const { data, error } = await Promise.race([profilePromise, timeoutPromise]);
         
       if (error) {
-        console.error('Error fetching Auth profile:', error);
+        console.warn('Profile fetch error (Auth table might not exist):', error.message);
+        setUserProfile({ fullname: 'CodeMind User', emailaddress: email });
       } else {
         setUserProfile(data);
       }
     } catch (err) {
-      console.error('Unexpected error fetching profile', err);
+      console.warn('Silent failure on profile fetch:', err.message);
+      setUserProfile({ fullname: 'CodeMind User', emailaddress: email });
     }
   };
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      // 1. Get current session
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      
-      if (session?.user?.email) {
-        await fetchProfile(session.user.email);
-      }
-      setLoading(false);
-    };
+    let mounted = true;
 
-    initializeAuth();
-
-    // 2. Set up listener for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      if (session?.user?.email) {
-        await fetchProfile(session.user.email);
-      } else {
-        setUserProfile(null);
+    async function getInitialSession() {
+      try {
+        // Initial session check
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
+        if (mounted) {
+          setSession(session);
+          if (session?.user?.email) {
+            await fetchProfile(session.user.email);
+          }
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('Session initialization failed:', err);
+        if (mounted) setLoading(false);
       }
-      setLoading(false);
+    }
+
+    getInitialSession();
+
+    // Listener for future changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
+      if (mounted) {
+        setSession(newSession);
+        if (newSession?.user?.email) {
+          await fetchProfile(newSession.user.email);
+        } else {
+          setUserProfile(null);
+        }
+        setLoading(false);
+      }
     });
 
     return () => {
+      mounted = false;
       subscription.unsubscribe();
     };
   }, []);
@@ -67,13 +90,14 @@ export const AuthProvider = ({ children }) => {
     loading,
     signOut: async () => {
       await supabase.auth.signOut();
+      setSession(null);
       setUserProfile(null);
     }
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

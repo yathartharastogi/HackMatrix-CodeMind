@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, Lightbulb, ShieldAlert, Cpu } from 'lucide-react';
+import { Bot, Lightbulb, ShieldAlert, Cpu, CheckCircle2, ChevronRight } from 'lucide-react';
 import './RightPanel.css';
 
 const RightPanel = ({ isLoading, aiResponse }) => {
@@ -8,7 +8,7 @@ const RightPanel = ({ isLoading, aiResponse }) => {
       
       <div className="ai-header">
         <Bot size={28} className="ai-icon-main" />
-        <h2 className="ai-title">AI Analysis</h2>
+        <h2 className="ai-title">AI Agent Insights</h2>
       </div>
 
       <div className="ai-content-scroll custom-scrollbar">
@@ -16,13 +16,13 @@ const RightPanel = ({ isLoading, aiResponse }) => {
         {!isLoading && !aiResponse && (
           <div className="ai-empty-state">
             <Bot size={48} className="ai-empty-icon" />
-            <p>Submit your code snippet to see AI insights.</p>
+            <p>CodeMind Agent is ready. Paste your code and click Analyze.</p>
           </div>
         )}
 
         {isLoading && (
           <div className="ai-loading-state">
-            {[1, 2, 3].map((skeleton) => (
+            {[1, 2, 3, 4].map((skeleton) => (
               <div key={skeleton} className="skeleton-card">
                 <div className="skeleton-header">
                   <div className="skeleton-icon pulse-bg"></div>
@@ -31,7 +31,6 @@ const RightPanel = ({ isLoading, aiResponse }) => {
                 <div className="skeleton-lines">
                   <div className="skeleton-line pulse-bg w-full"></div>
                   <div className="skeleton-line pulse-bg w-80"></div>
-                  <div className="skeleton-line pulse-bg w-60"></div>
                 </div>
               </div>
             ))}
@@ -39,44 +38,65 @@ const RightPanel = ({ isLoading, aiResponse }) => {
         )}
 
         {!isLoading && aiResponse && (
-          <div className="ai-results fade-in">
+          <div className="ai-results">
             
-            {/* Error Explanation */}
-            <div className="ai-result-card group">
+            {/* Error Type & Analysis */}
+            <div className="ai-result-card fade-in delay-1">
               <div className="result-header">
                 <ShieldAlert size={18} className="result-icon icon-error" />
-                <h3>Error Explanation</h3>
+                <h3>Error Analysis</h3>
               </div>
-              <p className="result-body">
-                <span className="highlight-tag">{aiResponse.error || "Syntax or Logic Error"}</span>
-                <br/><br/>
-                {aiResponse.explanation || "An unexpected error occurred in your snippet."}
-              </p>
+              <div className="result-body">
+                <div className="error-badge">{aiResponse.errorType || "Logical Pattern"}</div>
+                <p className="explanation-text">
+                  {aiResponse.explanation || "No major syntax errors detected, but logic optimization is possible."}
+                </p>
+              </div>
             </div>
 
-            {/* Pattern Insight */}
-            <div className="ai-result-card group">
+            {/* Suggested Fix */}
+            <div className="ai-result-card fade-in delay-2">
               <div className="result-header">
-                <Cpu size={18} className="result-icon icon-pattern" />
-                <h3>Pattern Insight</h3>
+                <CheckCircle2 size={18} className="result-icon icon-fix" />
+                <h3>Suggested Fix</h3>
               </div>
-              <p className="result-body">
-                {aiResponse.patternInsight || "No recurring patterns detected yet."}
-              </p>
+              <div className="result-body">
+                <pre className="code-fix-block">
+                  <code>{aiResponse.suggestedFix || "// Code looks solid!"}</code>
+                </pre>
+              </div>
             </div>
 
-            {/* Learning Tip */}
-            <div className="ai-result-card group">
+            {/* Learning Insight */}
+            <div className="ai-result-card fade-in delay-3">
               <div className="result-header">
                 <Lightbulb size={18} className="result-icon icon-tip" />
-                <h3>Learning Tip</h3>
+                <h3>Learning Insight</h3>
               </div>
-              <p className="result-body">
-                {aiResponse.learningTip || "Review the basic principles of this concept."}
-                <br/><br/>
-                <a href="#" className="learning-link">Review related documentation →</a>
-              </p>
+              <div className="result-body">
+                <p className="insight-text">
+                  {aiResponse.learningInsight || "Keep practicing these concepts to master the language."}
+                </p>
+                {aiResponse.rootCause && (
+                  <div className="root-cause-tag">
+                    <strong>Root Cause:</strong> {aiResponse.rootCause}
+                  </div>
+                )}
+              </div>
             </div>
+
+            {/* Pattern Awareness */}
+            {aiResponse.category && (
+              <div className="ai-result-card fade-in delay-4 secondary-card">
+                <div className="result-header">
+                  <Cpu size={16} className="result-icon icon-pattern" />
+                  <h3>Concept Category</h3>
+                </div>
+                <div className="result-body">
+                  <span className="category-pill">{aiResponse.category}</span>
+                </div>
+              </div>
+            )}
 
           </div>
         )}
@@ -88,7 +108,8 @@ const RightPanel = ({ isLoading, aiResponse }) => {
            disabled={isLoading || !aiResponse}
            className={`practice-btn ${isLoading || !aiResponse ? 'disabled' : ''}`}
         >
-          Practice Fix
+          <span>Deep Dive Study</span>
+          <ChevronRight size={16} />
         </button>
       </div>
 
