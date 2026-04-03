@@ -41,11 +41,10 @@ CodeMind focuses on **learning-driven debugging** by:
 
 ## Tech Stack  
 
-- **Frontend:** React + Tailwind CSS  
+- **Frontend:** React 
 - **Backend:** FastAPI  
 - **Database:** Supabase  
-- **AI Engine:** OpenAI API  
-- **Real-time Communication:** WebSockets  
+- **AI Engine:** Gemini API  
 
 ---
 
